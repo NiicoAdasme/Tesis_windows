@@ -17,12 +17,9 @@ from shapely.geometry import Point
 
 #gdal.SetConfigOption('SHAPE_RESTORE_SHX', 'YES')
 
-if platform.platform() == 'Windows':
-    df = pd.read_csv(r'C:\Users\Nico\Desktop\Tesis-teton\ihf.csv')
-    kings_county_map = gpd.read_file(r'C:\Users\Nico\Desktop\UBB\2022-2\Tesis\Shapefile\Regional.shp')
-else:
-    df = pd.read_csv('/home/debian/tesis/tkinter/csv/indice_riesgo_hidrico_1979-12-15.csv')
-    kings_county_map = gpd.read_file('/home/debian/tesis/Shapefile/Regional.shp')
+df = pd.read_csv(r'C:\Users\Nico\Desktop\Tesis-teton\ihf.csv')
+kings_county_map = gpd.read_file(r'C:\Users\Nico\Desktop\UBB\2022-2\Tesis\Shapefile\Regional.shp')
+
 
 
 #df = pd.read_csv('/home/debian/tesis/tkinter/csv/indice_riesgo_hidrico_1979-12-15.csv')
