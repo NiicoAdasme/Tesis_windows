@@ -14,6 +14,10 @@ def main():
     #root.iconbitmap('img/logoubb.ico')
     root.resizable(0,0)
     
+    # theme
+    root.tk.call("source", "Azure/azure.tcl")
+    root.tk.call("set_theme", "dark")
+    
     barra_menu(root)
 
     app = Frame(root = root)

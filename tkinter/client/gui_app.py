@@ -4,6 +4,8 @@ from client.plot_netcdf import plot
 from client.to_csv import export_csv
 from client.generate_timelapse import gen_timelapse
 from client.ih_to_csv import ih_to_csv
+from client.combinar_netcdf import combinar_netcdf
+from client.probandotesislogicafinal import export_ih_to_netcdf
 from PIL import Image, ImageTk
 from tkcalendar import DateEntry
 import datetime
@@ -91,20 +93,22 @@ class Frame(tk.Frame):
         # Button to calculate the index risk of water
         #if len(self.entry_tmin.get()) > 0 and len(self.entry_tmax.get()) > 0 and len(self.entry_pr.get()) > 0:
         # Button to merge all netcdf
-        self.lbl_ih = tk.Label(self, text= 'Calcular indice de riesgo hidrico')
+        self.lbl_ih = tk.Label(self, text= 'Indice de Riesgo Hídrico')
         self.lbl_ih.grid(row= 3, column= 0, padx= 10, pady= 10)
 
         # Button show Map
         self.button_show_ih = tk.Button(self, text= 'Ver Mapa', command= lambda:self.show_map(tipo= 'ih'))
         self.button_show_ih.grid(row= 3, column= 1, padx= 10, pady= 10)
 
+        # Button merge netcdf
+        self.button_merge = tk.Button(self, text= 'Exportar a NetCDF', command= lambda:self.validarCampos())
+        self.button_merge.grid(row= 3, column= 2, padx=10 , pady=10)
+
         # Button export to CSV
         self.button_export_ih = tk.Button(self, text= 'Exportar a CSV', command= lambda:self.export(tipo= 'ih'))
-        self.button_export_ih.grid(row= 3, column= 2, padx= 10, pady= 10)
+        self.button_export_ih.grid(row= 3, column= 3, padx= 10, pady= 10)
 
-        # Button to generate GIF
-        self.button_gif_ih = tk.Button(self, text= 'Generar GIF', command= lambda: self.generate_gif(tipo= 'ih') )
-        self.button_gif_ih.grid(row= 3, column= 3, padx= 10, pady= 10)
+
 
     # Functions open file
     def open_file(self, tipo= ['tmin', 'tmax', 'pr', 'ih']):
@@ -201,7 +205,7 @@ class Frame(tk.Frame):
     def modal_calendar(self, tipo= ['tmin', 'tmax', 'pr', 'ih'], action= ['plot', 'csv']):
         top = tk.Toplevel()
         top.title('Seleccione una fecha')
-        top.geometry("680x80")
+        top.geometry("700x80")
 
         lbl = tk.Label(top, text= 'Seleccione una fecha entre 1978-12-15 y 2019-01-01 (Formato: YYYY-MM-DD)')
         lbl.grid(row= 0, column= 0, padx= 10, pady= 10)
@@ -266,7 +270,7 @@ class Frame(tk.Frame):
         image = ImageTk.PhotoImage(Image.open(res))
         top = tk.Toplevel()
         top.title(titulo + str(fecha))
-        top.geometry("800x750")
+        top.geometry("800x850")
         lbl = tk.Label(top, image= image)
         lbl.grid(row= 0, column= 0)
         tk.messagebox.showinfo('Imagen Guardada', 'La imagen se guardó correctamente en '+ str(res))
@@ -292,7 +296,6 @@ class Frame(tk.Frame):
         else:
             tk.messagebox.showerror('Ups! Error al generar GIF', 'Lo sentimos. Hubo un error al generar el GIF')
 
-
     # export to csv
     def export_to_csv(self, fecha, tipo= ['tmin', 'tmax', 'pr', 'ih']):
         if tipo == 'tmin':
@@ -308,7 +311,9 @@ class Frame(tk.Frame):
             ruta_tmin = self.entry_tmin.get()
             ruta_tmax = self.entry_tmax.get()
             ruta_pr = self.entry_pr.get()
+            # ! IMPORTANTE. CAMBIAR EL IH_TO_CSV. SE ESTA UTILIZANDO LA ECUACION ANTERIOR DEL CALCULO DE IH. UTILIZAR LA ACTUAL (POR ZONAS) PARA EXPORTAR A CSV
             res = ih_to_csv(ruta_tmin= ruta_tmin, ruta_tmax= ruta_tmax, ruta_pr= ruta_pr, fecha= fecha)
+            # ! IMPORTANTE.
         else:
             res = export_csv(path_netcdf, fecha, tipo)
 
@@ -317,3 +322,94 @@ class Frame(tk.Frame):
         else:
             tk.messagebox.showerror('Ups! Error al exportar', 'Lo sentimos. No se pudo exportar a CSV')
 
+    def merge_netcdf(self, tmin, tmax, pr):
+        # netcdf_tmin= self.entry_tmin.get()
+        # netcdf_tmax= self.entry_tmax.get()
+        # netcdf_pr= self.entry_pr.get()
+
+        # resValid = self.validarCampos()
+
+        res, output_path = combinar_netcdf(netcdf_tmin= tmin, netcdf_tmax= tmax, netcdf_pr= pr)
+
+        print(res, output_path)
+
+        if res == None:
+            tk.messagebox.showinfo('Merge exitoso', 'Se combinaron los tres archivos NetCDF de forma exitosa en la carpeta NetCDF')
+            return self.modal_ih(ruta_netcdf_merged= output_path)
+        else:
+            tk.messagebox.showerror('Ups! Error al combinar', 'Lo sentimos. No se pudo combinar los archivos NetCDF')
+            return False
+
+    def validarCampos(self):
+        ruta_tmin = self.entry_tmin.get()
+        ruta_tmax = self.entry_tmax.get()
+        ruta_pr = self.entry_pr.get()
+
+        if len(ruta_tmin) > 0 and len(ruta_tmax) > 0 and len(ruta_pr) > 0:            
+            return self.merge_netcdf(tmin= ruta_tmin, tmax= ruta_tmax, pr= ruta_pr)
+        else: 
+            return tk.messagebox.showerror('Ups! Faltan archivos NetCDF', 'Se deben ingresar los tres archivos NetCDF para combinarlos ⚠')
+
+    # ? DEFINIR FUNCION PARA CREAR NETCDF POR ZONA Y FECHA (MES) SELECCIONADA
+    def ih_to_netcdf(self, ruta, fecha, zona):
+
+        # res_merged = self.merge_netcdf()
+
+        res = export_ih_to_netcdf(ruta_nc_combinado= ruta, fecha= fecha, zona= zona)
+
+        if len(res) > 0:
+            tk.messagebox.showinfo('NetCDF Creado', 'Se creó el archivo NetCDF de forma exitosa en la carpeta NetCDF')
+        else:
+            tk.messagebox.showerror('Ups! Error al crear NetCDF', 'Lo sentimos. No se pudo crear el archivo NetCDF')
+
+    def validar_fecha(self, fecha, zona, ruta):
+        start_date = datetime.date(1978, 12, 15)
+        ending_date = datetime.date(2019, 10, 30)
+
+        if fecha < start_date or fecha > ending_date:
+            return tk.messagebox.showerror('Ups! Fecha invalida', 'Lo sentimos. Ingrese una fecha valida')
+        else:
+            return self.ih_to_netcdf(ruta, fecha, zona)
+
+    def modal_ih(self, ruta_netcdf_merged):
+        top = tk.Toplevel()
+        top.title('Seleccione una fecha y zona')
+        top.geometry("500x180")
+
+        # Fecha
+        lbl = tk.Label(top, text= 'Seleccione una fecha (1978-12-15 y 2019-01-01)')
+        lbl.grid(row= 0, column= 0, padx= 10, pady= 10)
+        cal = DateEntry(top, selectmode= 'day', date_pattern= 'YYYY-mm-dd')
+        cal.grid(row= 0, column= 1, padx= 10, pady= 10)
+        
+        # Zona
+        lbl = tk.Label(top, text= 'Seleccione una zona')
+        lbl.grid(row= 1, column= 0, padx= 10, pady= 10)
+
+        OPTIONS = [
+            "12",
+            "03",
+            "04",
+            "05",
+            "06",
+            "07"
+        ]
+
+        variable = tk.StringVar(top)
+        variable.set(OPTIONS[0]) # default value
+
+        dropdown = tk.OptionMenu(top, variable, *OPTIONS)
+        dropdown.grid(row= 1, column= 1, padx= 10, pady= 10)
+
+        self.button_date = tk.Button(top, text= 'Exportar a NetCDF', command= lambda: self.validar_fecha(fecha= cal.get_date(), zona= variable.get(),ruta= ruta_netcdf_merged))
+        self.button_date.grid(row= 2, column= 1, padx= 10, pady= 10)
+
+        top.mainloop()
+
+    # ? DEFINIR FUNCION PARA MOSTRAR EL MAPA DE LA ZONA Y FECHA (MES) SELECCIONADA
+
+    # ? DEFINIR FUNCION PARA EXPORTAR A CSV LA ZONA Y FECHA (MES) SELECCIONADA
+
+    # ? DEFINIR FUNCION PARA GENERAR GIF DE LA ZONA Y FECHA (MES) SELECCIONADA
+
+    

@@ -8,6 +8,16 @@
 /tkinter/csv
 .ipynb_checkpoints
 /Shapefile
+/codigos/*.nc
+/codigos/Regiones
+/Paso a paso/*.nc
+/Paso a paso/*.csv
+/Paso a paso/*.jpg
+/Paso a paso/Regiones
+/codigos
+/climate_indices
+/tkinter/Azure
+/tkinter/netcdf/*.nc
 comandos_para_merge_NetCDF.txt
 modulos_anaconda.txt
 __pycache__
