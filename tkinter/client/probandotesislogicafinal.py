@@ -86,7 +86,7 @@ def export_ih_to_netcdf(ruta_nc_combinado, fecha, zona):
 
     # ? RUTA DE SALIDA
     # ruta_netcdf = 'C:/Users/Nico/Desktop/UBB/2022-2/Tesis_windows/Paso a paso/output3-nico.nc'  # Ruta del archivo netCDF de salida
-    ruta_netcdf = f'netcdf/water_risk_index_{fecha}_{zona}.nc'
+    ruta_netcdf = f'./netcdf/water_risk_index_{fecha}_{zona}.nc'
     # Crear el archivo netCDF
     nc_file = nc.Dataset(ruta_netcdf, 'w', format='NETCDF4')
 
@@ -108,6 +108,6 @@ def export_ih_to_netcdf(ruta_nc_combinado, fecha, zona):
     var_ih[:] = df['ih'].values
 
     # Cerrar el archivo netCDF
-    nc_file.close()
+    # nc_file.close()
 
     return ruta_netcdf

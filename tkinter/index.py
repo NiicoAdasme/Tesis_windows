@@ -3,11 +3,12 @@ import os
 from client.gui_app import Frame, barra_menu
 
 def main():
-    if os.path.isdir('img') or os.path.isdir('csv'):
+    if os.path.isdir('img') or os.path.isdir('csv') or os.path.isdir('netcdf'):
         pass
     else:
         os.makedirs('img/timelapse')
         os.mkdir('csv')
+        os.mkdir('netcdf')
     
     root = tk.Tk()
     root.title('Calculo de indice hidrico')

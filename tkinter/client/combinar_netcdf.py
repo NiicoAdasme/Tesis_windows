@@ -15,7 +15,7 @@ def combinar_netcdf (netcdf_tmin, netcdf_tmax, netcdf_pr):
 
     combined_ds = xr.merge([ds1['tmin'], ds2['tmax'], ds3['pr']])
 
-    output_path = 'netcdf/archivo_combinado.nc'
+    output_path = './netcdf/archivo_combinado.nc'
 
     return combined_ds.to_netcdf(output_path), output_path
 
