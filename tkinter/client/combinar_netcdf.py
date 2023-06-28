@@ -15,6 +15,7 @@ def combinar_netcdf (netcdf_tmin, netcdf_tmax, netcdf_pr):
 
     combined_ds = xr.merge([ds1['tmin'], ds2['tmax'], ds3['pr']])
 
+    # ruta = './netcdf/archivo_combinado.nc'
     ruta_actual = os.getcwd()
     ruta_completa = os.path.join(ruta_actual, 'netcdf', 'archivo_combinado.nc')
 

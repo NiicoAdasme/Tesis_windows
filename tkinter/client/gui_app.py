@@ -330,6 +330,7 @@ class Frame(tk.Frame):
         # netcdf_pr= self.entry_pr.get()
 
         # resValid = self.validarCampos()
+        # * VALIDAR QUE EL ARCHIVO COMBINADO EXISTA. CASO CONTRARIO SE CREA
 
         res, output_path = combinar_netcdf(netcdf_tmin= tmin, netcdf_tmax= tmax, netcdf_pr= pr)
 
@@ -364,7 +365,7 @@ class Frame(tk.Frame):
     def ih_to_netcdf(self, ruta, fecha, zona):
 
         # res_merged = self.merge_netcdf()
-
+        
         res = export_ih_to_netcdf(ruta_nc_combinado= ruta, fecha= fecha, zona= zona)
 
         if len(res) > 0:
