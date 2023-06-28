@@ -10,12 +10,10 @@ def export_ih_to_netcdf(ruta_nc_combinado, fecha, zona):
 
     # ? VARIABLE
     # ruta = r'C:\Users\Nico\Desktop\UBB\2022-2\Tesis_windows\Paso a paso\archivo_combinado.nc' 
-    # ruta = r''+ str(ruta_nc_combinado)
-    # assert os.path.isfile(ruta)
-    
-    print('\nRuta desde el export ih to netcdf: \n')
-    print(ruta + '\n')
 
+    # ruta_actual = os.getcwd()
+    # ruta = os.path.join(ruta_actual, 'netcdf', 'archivo_combinado.nc')
+    
     data = nc.Dataset(ruta_nc_combinado, 'r')
 
     lat = data.variables['lat'][:]
@@ -36,7 +34,7 @@ def export_ih_to_netcdf(ruta_nc_combinado, fecha, zona):
 
     # ? VARIABLES
     ending_date = str(fecha)
-    zona_interes = zona 
+    zona_interes = str(zona) 
 
     starting_date = data.variables['time'].units[13:23]
     print('Fecha de inicio: ', starting_date)
@@ -48,8 +46,8 @@ def export_ih_to_netcdf(ruta_nc_combinado, fecha, zona):
     print('Fecha: ', ending_date, '| Posicion de la fecha: ', pos_date)
     print('Zona: ', zona_interes)
 
-    fecha = datetime.strptime(ending_date, '%Y-%m-%d')
-    mes = fecha.strftime('%m')
+    fecha_datetime = datetime.strptime(ending_date, '%Y-%m-%d')
+    mes = fecha_datetime.strftime('%m')
 
     df = pd.DataFrame()
     cont = 0
@@ -89,9 +87,16 @@ def export_ih_to_netcdf(ruta_nc_combinado, fecha, zona):
 
     # ? RUTA DE SALIDA
     # ruta_netcdf = 'C:/Users/Nico/Desktop/UBB/2022-2/Tesis_windows/Paso a paso/output3-nico.nc'  # Ruta del archivo netCDF de salida
-    ruta_netcdf = f'./netcdf/water_risk_index_{fecha}_{zona}.nc'
+    ruta_actual = os.getcwd()
+    filename = f'water_risk_index_{str(fecha)}_zona_{str(zona)}.nc'
+    
+    ruta_completa = os.path.join(ruta_actual, 'netcdf', filename)
+    # ruta_completa = os.path.join(ruta_actual, 'netcdf', 'water_risk_index.nc')
+    # ruta_completa = os.path.join(ruta_actual, 'netcdf', 'output.nc')
+    # ruta_netcdf = f'./netcdf/water_risk_index_{fecha}_{zona}.nc'
+
     # Crear el archivo netCDF
-    nc_file = nc.Dataset(ruta_netcdf, 'w', format='NETCDF4')
+    nc_file = nc.Dataset(ruta_completa, 'w', format='NETCDF4')
 
     # Definir las dimensiones
     nc_file.createDimension('lat', len(df))
@@ -113,4 +118,4 @@ def export_ih_to_netcdf(ruta_nc_combinado, fecha, zona):
     # Cerrar el archivo netCDF
     # nc_file.close()
 
-    return ruta_netcdf
+    return ruta_completa

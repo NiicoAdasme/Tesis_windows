@@ -3,9 +3,14 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 from WaterRiskIndex import get_index_month_zone
+import os
 
 
-ruta = r'C:\Users\Nico\Desktop\UBB\2022-2\Tesis_windows\Paso a paso\archivo_combinado.nc'
+#ruta = r'C:\Users\Nico\Desktop\UBB\2022-2\Tesis_windows\Paso a paso\archivo_combinado.nc'
+#ruta = r'C:\Users\Nico\Desktop\ArchivosNetCDF\CR2\1979-2019\CR2MET_merged.nc'
+#ruta = r'C:\Users\Nico\Desktop\UBB\2022-2\Tesis_windows\tkinter\netcdf\archivo_combinado.nc'
+ruta_actual = os.getcwd()
+ruta = os.path.join(ruta_actual, 'netcdf', 'archivo_combinado.nc')
 data = nc.Dataset(ruta)
 
 lat = data.variables['lat'][:]
@@ -76,7 +81,10 @@ for i in dlat[0]:
 print(df)
 
 
-ruta_netcdf = 'C:/Users/Nico/Desktop/UBB/2022-2/Tesis_windows/Paso a paso/output3-nico.nc'  # Ruta del archivo netCDF de salida
+#ruta_netcdf = 'C:/Users/Nico/Desktop/UBB/2022-2/Tesis_windows/tkinter/netcdf/output4-nico.nc'  # Ruta del archivo netCDF de salida
+ruta_actual = os.getcwd()
+ruta_netcdf = os.path.join(ruta_actual, 'netcdf', 'output2.nc')
+
 # Crear el archivo netCDF
 nc_file = nc.Dataset(ruta_netcdf, 'w', format='NETCDF4')
 

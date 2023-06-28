@@ -6,6 +6,7 @@ Created on Fri Mar  3 18:56:01 2023
 """
 
 import xarray as xr
+import os
 
 def combinar_netcdf (netcdf_tmin, netcdf_tmax, netcdf_pr):
 
@@ -19,5 +20,5 @@ def combinar_netcdf (netcdf_tmin, netcdf_tmax, netcdf_pr):
     ruta_actual = os.getcwd()
     ruta_completa = os.path.join(ruta_actual, 'netcdf', 'archivo_combinado.nc')
 
-    return combined_ds.to_netcdf(ruta_actual), ruta_actual
+    return combined_ds.to_netcdf(ruta_completa), ruta_completa
 
