@@ -10,10 +10,13 @@ def export_ih_to_netcdf(ruta_nc_combinado, fecha, zona):
 
     # ? VARIABLE
     # ruta = r'C:\Users\Nico\Desktop\UBB\2022-2\Tesis_windows\Paso a paso\archivo_combinado.nc' 
-    ruta = r'' + ruta_nc_combinado
-    assert os.path.isfile(ruta)
+    # ruta = r''+ str(ruta_nc_combinado)
+    # assert os.path.isfile(ruta)
+    
+    print('\nRuta desde el export ih to netcdf: \n')
+    print(ruta + '\n')
 
-    data = nc.Dataset(ruta)
+    data = nc.Dataset(ruta_nc_combinado, 'r')
 
     lat = data.variables['lat'][:]
     lon = data.variables['lon'][:]

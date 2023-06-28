@@ -6,9 +6,11 @@ from client.generate_timelapse import gen_timelapse
 from client.ih_to_csv import ih_to_csv
 from client.combinar_netcdf import combinar_netcdf
 from client.probandotesislogicafinal import export_ih_to_netcdf
+from client.Mapa_mallas_beta import mapa_ih
 from PIL import Image, ImageTk
 from tkcalendar import DateEntry
 import datetime
+import os
 
 def barra_menu(root):
     barra_menu = tk.Menu(root)
@@ -345,8 +347,16 @@ class Frame(tk.Frame):
         ruta_tmax = self.entry_tmax.get()
         ruta_pr = self.entry_pr.get()
 
-        if len(ruta_tmin) > 0 and len(ruta_tmax) > 0 and len(ruta_pr) > 0:            
-            return self.merge_netcdf(tmin= ruta_tmin, tmax= ruta_tmax, pr= ruta_pr)
+        ruta_actual = os.getcwd()
+        ruta_completa = os.path.join(ruta_actual, 'netcdf', 'archivo_combinado.nc')
+
+        if len(ruta_tmin) > 0 and len(ruta_tmax) > 0 and len(ruta_pr) > 0:
+            # validar que exista el archivo combinado. caso contrario, crearlo
+            if os.path.isfile(ruta_completa):
+                # modal ih
+                return self.modal_ih(ruta_netcdf_merged= ruta_completa)
+            else:
+                self.merge_netcdf(tmin= ruta_tmin, tmax= ruta_tmax, pr= ruta_pr)
         else: 
             return tk.messagebox.showerror('Ups! Faltan archivos NetCDF', 'Se deben ingresar los tres archivos NetCDF para combinarlos ⚠')
 
@@ -407,7 +417,16 @@ class Frame(tk.Frame):
         top.mainloop()
 
     # ? DEFINIR FUNCION PARA MOSTRAR EL MAPA DE LA ZONA Y FECHA (MES) SELECCIONADA
+    def show_ih(self, ruta_netcdf_fecha_zona):
+        res = mapa_ih(ruta_netcdf= ruta_netcdf_fecha_zona)
 
+        if res != False:
+            # exitoso. ruta de la imagen
+            tk.messagebox.showinfo('Mapa IH', 'Se creó el mapa IH de forma exitosa en la carpeta img')
+        else:
+            # error
+            tk.messagebox.showerror('Ups! Error al crear mapa IH', 'Lo sentimos. No se pudo crear el mapa IH')
+             
     # ? DEFINIR FUNCION PARA EXPORTAR A CSV LA ZONA Y FECHA (MES) SELECCIONADA
 
     # ? DEFINIR FUNCION PARA GENERAR GIF DE LA ZONA Y FECHA (MES) SELECCIONADA

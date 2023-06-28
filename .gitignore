@@ -16,7 +16,6 @@
 /Paso a paso/Regiones
 /codigos
 /climate_indices
-/tkinter/Azure
 /tkinter/netcdf/*.nc
 comandos_para_merge_NetCDF.txt
 modulos_anaconda.txt
