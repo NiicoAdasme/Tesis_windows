@@ -16,6 +16,7 @@ from geopandas.tools import sjoin
 from shapely.geometry import Point
 import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
+import os
 
 def mapa_ih(ruta_netcdf):
     # archivo = 'C:/Users/Nico/Desktop/UBB/2022-2/Tesis_windows/Paso a paso/output3-nico.nc'
@@ -192,7 +193,7 @@ def mapa_ih(ruta_netcdf):
 
         return path_img
         # Mostrar el mapa
-        plt.show()
+        #plt.show()
     else:
         print("No hay datos válidos después del recorte.")
         return False
