@@ -3,13 +3,28 @@ import os
 from client.gui_app import Frame, barra_menu
 
 def main():
-    if os.path.isdir('img') or os.path.isdir('csv') or os.path.isdir('netcdf'):
+    # if os.path.isdir('img') or os.path.isdir('csv') or os.path.isdir('netcdf'):
+    #     pass
+    # else:
+    #     os.makedirs('img/timelapse')
+    #     os.mkdir('csv')
+    #     os.mkdir('netcdf')
+    
+    if os.path.isdir('img'):
         pass
     else:
         os.makedirs('img/timelapse')
+
+    if os.path.isdir('csv'):
+        pass
+    else:
         os.mkdir('csv')
+
+    if os.path.isdir('netcdf'):
+        pass
+    else:
         os.mkdir('netcdf')
-    
+
     root = tk.Tk()
     root.title('Calculo de indice hidrico')
     #root.iconbitmap('img/logoubb.ico')

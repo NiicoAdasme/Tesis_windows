@@ -227,7 +227,7 @@ class Frame(tk.Frame):
     def modal_calendar(self, tipo= ['tmin', 'tmax', 'pr', 'ih'], action= ['plot', 'csv']):
         top = tk.Toplevel()
         top.title('Seleccione una fecha')
-        top.geometry("700x80")
+        top.geometry("780x80")
 
         lbl = tk.Label(top, text= 'Seleccione una fecha entre 1978-12-15 y 2019-01-01 (Formato: YYYY-MM-DD)')
         lbl.grid(row= 0, column= 0, padx= 10, pady= 10)
@@ -339,7 +339,7 @@ class Frame(tk.Frame):
         else:
             tk.messagebox.showerror('Ups! Error al exportar', 'Lo sentimos. No se pudo exportar a CSV')
 
-    def merge_netcdf(self, tmin, tmax, pr):
+    def merge_netcdf(self, tmin , tmax, pr):
         res, output_path = combinar_netcdf(netcdf_tmin= tmin, netcdf_tmax= tmax, netcdf_pr= pr)
 
         print(res, output_path)
