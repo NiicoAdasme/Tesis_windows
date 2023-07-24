@@ -87,7 +87,7 @@ def gen_timelapse(ruta, tipo= ['tmin', 'tmax', 'pr']):
 
     for i in months:
     #for i in range(1, 5):
-        path_abs = os.path.join('img', 'timelapse', ruta[0], str(i) + '.jpg')
+        path_abs = os.path.join('img', 'timelapse', ruta[0], str(i+1) + '.jpg')
         new_frame = PIL.Image.open(path_abs)
         image_frames.append(new_frame)
     

@@ -5,15 +5,15 @@ Created on Tue Nov 22 21:37:15 2022
 @author: Nico
 """
 
-import PIL
+from PIL import Image
 import numpy as np
 
 image_frames = []
 
-months = np.arange(1, 491)
+months = np.arange(1, 492)
 
 for i in months:
-    new_frame = PIL.Image.open(r'C:\Users\Nico\Desktop\UBB\2022-2\Tesis\images_gif'+'\\'+ str(i)+'.jpg')
+    new_frame = Image.open(r'C:\\Users\\Nico\\Desktop\\UBB\\2022-2\\Tesis_windows\\tkinter\\img\\CR2MET_tmin_v2.0_mon_1979_2019_005deg'+'\\'+ str(i)+'.jpg')
     image_frames.append(new_frame)
     
 image_frames[0].save('temprature_timelapse.gif', format= 'GIF',
